@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3D Menu System</title>
+    <meta
+      name="description"
+      content="A static Three.js menu system with keyboard navigation and a cinematic wide-screen scene."
+    />
+  </head>
+  <body>
+    <div id="app">
+      <main class="scene-panel" aria-label="Simulator scene and 3D menu">
+        <div id="scene-root"></div>
+        <div class="status-bar" aria-live="polite">
+          <span class="status-value">Main Menu</span>
+          <span class="controls-value">↑ ↓ Navigate · Enter Select · Delete Back</span>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

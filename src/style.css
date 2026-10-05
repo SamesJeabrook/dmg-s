@@ -1,0 +1,110 @@
+:root {
+  --bg-deep: #040b14;
+  --bg-mid: #0d1b2a;
+  --panel: rgba(8, 15, 24, 0.8);
+  --panel-border: rgba(173, 216, 255, 0.25);
+  --text: #eaf6ff;
+  --muted: #9ec4d9;
+  --highlight: #73c5ff;
+  --highlight-strong: #8ef0d9;
+  --shadow: rgba(10, 18, 28, 0.6);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  font-family: Inter, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #10253d 0%, var(--bg-deep) 45%, #02070d 100%);
+  color: var(--text);
+}
+
+body {
+  min-height: 100vh;
+}
+
+button, input, textarea, select {
+  font: inherit;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+.app-shell {
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  background-image:
+    linear-gradient(90deg, rgba(255,255,255,0.035) 0, rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255,255,255,0.035) 0, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+.scene-panel {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 62% 48%, rgba(18, 54, 74, 0.38), transparent 54%),
+    linear-gradient(135deg, rgba(1, 6, 11, 0.45), rgba(7, 21, 32, 0.72));
+}
+
+#scene-root {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#scene-root canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.status-bar {
+  position: absolute;
+  z-index: 1;
+  right: 24px;
+  bottom: 20px;
+  left: 24px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.status-value {
+  padding: 9px 12px;
+  border: 1px solid rgba(174, 210, 235, 0.2);
+  border-radius: 4px;
+  background: rgba(3, 10, 18, 0.64);
+  color: var(--text);
+  font-size: 0.72rem;
+  letter-spacing: 0.01em;
+  backdrop-filter: blur(8px);
+}
+
+.controls-value {
+  align-self: flex-end;
+  color: var(--muted);
+  font-size: 0.72rem;
+  text-shadow: 0 2px 8px #02070d;
+}
+
+@media (max-width: 640px) {
+  .status-bar {
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+  }
+
+  .status-value {
+    margin-left: auto;
+    font-size: 0.66rem;
+  }
+}

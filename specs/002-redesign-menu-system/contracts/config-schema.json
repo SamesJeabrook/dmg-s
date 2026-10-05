@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "In-Scene Menu Configuration",
+  "type": "object",
+  "required": ["id", "label", "children"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "label": { "type": "string", "minLength": 1 },
+    "children": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/menuNode" }
+    },
+    "cameraMotion": {
+      "type": "object",
+      "properties": {
+        "idlePan": {
+          "type": "object",
+          "properties": {
+            "axis": { "enum": ["x", "y", "z"] },
+            "amplitude": { "type": "number", "minimum": 0 },
+            "period": { "type": "number", "exclusiveMinimum": 0 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "vector3": {
+      "type": "object",
+      "required": ["x", "y", "z"],
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "z": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "menuNode": {
+      "type": "object",
+      "required": ["id", "label", "type"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["group", "action", "back"] },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/menuNode" }
+        },
+        "presentation": {
+          "type": "object",
+          "properties": {
+            "position": { "$ref": "#/$defs/vector3" },
+            "rotation": {
+              "$ref": "#/$defs/vector3",
+              "description": "Fixed XYZ Euler rotation in degrees."
+            },
+            "size": { "type": "number", "exclusiveMinimum": 0 }
+          },
+          "additionalProperties": false
+        },
+        "camera": {
+          "type": "object",
+          "required": ["position", "focus"],
+          "properties": {
+            "position": { "$ref": "#/$defs/vector3" },
+            "focus": { "$ref": "#/$defs/vector3" },
+            "transition": {
+              "type": "object",
+              "properties": {
+                "duration": { "type": "number", "minimum": 0 },
+                "easing": { "enum": ["linear", "easeInOut"] }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "target": { "type": ["string", "null"] },
+        "description": { "type": ["string", "null"] },
+        "isBackOption": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    }
+  }
+}
