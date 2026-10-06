@@ -70,3 +70,23 @@ test('saved camera views use the settled base position, not the current pan offs
   assert.ok(Math.abs(camera.position.x - 0.1) < 1e-8);
   assert.deepEqual(motion.getView().position, { x: 0, y: 1.4, z: 8 });
 });
+
+test('camera option can replace idle pan and saved view restores the prior pan', () => {
+  const camera = createTestCamera();
+  const motion = createCameraTransition(camera, { x: 0, y: 0, z: 0 }, {
+    axis: 'x',
+    amplitude: 0.1,
+    period: 8,
+  });
+
+  const homeView = motion.getView();
+  assert.equal(motion.start({
+    position: { x: 2, y: 1, z: 6 },
+    focus: { x: 0, y: 0, z: 0 },
+    idlePan: { axis: 'y', amplitude: 0.2, period: 10 },
+  }, 0, { duration: 0 }), true);
+
+  assert.deepEqual(motion.getView().idlePan, { axis: 'y', amplitude: 0.2, period: 10 });
+  assert.equal(motion.start(homeView, 1, { duration: 0 }), true);
+  assert.deepEqual(motion.getView().idlePan, { axis: 'x', amplitude: 0.1, period: 8 });
+});

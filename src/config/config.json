@@ -1,18 +1,26 @@
 {
   "id": "root",
   "label": "Main Menu",
-  "cameraMotion": {
-    "idlePan": { "axis": "x", "amplitude": 0.08, "period": 8 }
+  "menuSettings": {
+    "position": { "x": 0.4, "y": -1.2, "z": -0.3 }
+  },
+  "cameraSettings": {
+    "home": {
+      "position": { "x": 0, "y": 1.4, "z": 6 },
+      "focusOffset": { "x": 0, "y": 0, "z": 0 }
+    },
+    "idlePan": { "axis": "x", "amplitude": 1.08, "period": 12 }
   },
   "children": [
     {
       "id": "garage",
       "label": "Garage",
       "type": "group",
-      "presentation": { "position": { "x": -3.4, "y": 1.2, "z": 0.8 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "size": 0.38 },
+      "presentation": { "position": { "x": -3.4, "y": 2.7, "z": 0.8 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "size": 0.38, "childSize": 0.28 },
       "camera": {
-        "position": { "x": 2.8, "y": 0.3, "z": 6.2 },
-        "focus": { "x": 0, "y": -0.8, "z": 0 },
+        "position": { "x": 2.8, "y": 2.3, "z": 3.2 },
+        "focus": { "x": 0, "y": 1.5, "z": 0 },
+        "idlePan": { "axis": "x", "amplitude": 0.12, "period": 10 },
         "transition": { "duration": 2.4, "easing": "easeInOut" }
       },
       "children": [
@@ -20,13 +28,13 @@
           "id": "vehicles",
           "label": "Vehicles",
           "type": "group",
-          "presentation": { "position": { "x": -2.2, "y": 0.2, "z": 0.8 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "size": 0.38 },
+          "presentation": { "position": { "x": -3.2, "y": 2.7, "z": 0.8 }, "rotation": { "x": 0, "y": 50, "z": 0 }, "childSize": 0.22 },
           "children": [
             {
               "id": "race-car",
               "label": "Race Car",
               "type": "action",
-              "presentation": { "position": { "x": -2.2, "y": 0.2, "z": 0.8 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "size": 0.38 },
+              "presentation": { "position": { "x": -3.2, "y": 2.7, "z": 0.8 }, "rotation": { "x": 0, "y": 50, "z": 0 } },
               "target": "vehicle/race-car",
               "description": "Launch the performance racing configuration."
             },
@@ -34,7 +42,7 @@
               "id": "classic",
               "label": "Classic",
               "type": "action",
-              "presentation": { "position": { "x": -2.2, "y": -0.35, "z": 0.8 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "size": 0.38 },
+              "presentation": { "position": { "x": -3.2, "y": 2.35, "z": 0.8 }, "rotation": { "x": 0, "y": 50, "z": 0 } },
               "target": "vehicle/classic",
               "description": "Load the classic track profile."
             },
@@ -42,7 +50,7 @@
               "id": "back",
               "label": "Back",
               "type": "back",
-              "presentation": { "position": { "x": -2.2, "y": -0.9, "z": 0.8 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "size": 0.34 },
+              "presentation": { "position": { "x": -3.2, "y": 1.9, "z": 0.8 }, "rotation": { "x": 0, "y": 50, "z": 0 } },
               "isBackOption": true
             }
           ]
@@ -51,13 +59,13 @@
           "id": "settings",
           "label": "Settings",
           "type": "group",
-          "presentation": { "position": { "x": -2.2, "y": -0.35, "z": 0.8 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "size": 0.38 },
+          "presentation": { "position": { "x": -3.2, "y": 2.35, "z": 0.8 }, "rotation": { "x": 0, "y": 50, "z": 0 }, "childSize": 0.22 },
           "children": [
             {
               "id": "display",
               "label": "Display",
               "type": "action",
-              "presentation": { "position": { "x": -2.2, "y": 0.2, "z": 0.8 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "size": 0.38 },
+              "presentation": { "position": { "x": -3.2, "y": 2.7, "z": 0.8 }, "rotation": { "x": 0, "y": 50, "z": 0 } },
               "target": "settings/display",
               "description": "Tune the widescreen display configuration."
             },
@@ -65,7 +73,7 @@
               "id": "audio",
               "label": "Audio",
               "type": "action",
-              "presentation": { "position": { "x": -2.2, "y": -0.35, "z": 0.8 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "size": 0.38 },
+              "presentation": { "position": { "x": -3.2, "y": 2.35, "z": 0.8 }, "rotation": { "x": 0, "y": 50, "z": 0 } },
               "target": "settings/audio",
               "description": "Configure cockpit audio mix."
             },
@@ -73,7 +81,7 @@
               "id": "back",
               "label": "Back",
               "type": "back",
-              "presentation": { "position": { "x": -2.2, "y": -0.9, "z": 0.8 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "size": 0.34 },
+              "presentation": { "position": { "x": -3.2, "y": 1.9, "z": 0.8 }, "rotation": { "x": 0, "y": 50, "z": 0 } },
               "isBackOption": true
             }
           ]
@@ -82,7 +90,7 @@
           "id": "back",
           "label": "Back",
           "type": "back",
-          "presentation": { "position": { "x": -2.2, "y": -0.9, "z": 0.8 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "size": 0.34 },
+          "presentation": { "position": { "x": -3.2, "y": 1.9, "z": 0.8 }, "rotation": { "x": 0, "y": 50, "z": 0 } },
           "isBackOption": true
         }
       ]
@@ -91,10 +99,11 @@
       "id": "telemetry",
       "label": "Telemetry",
       "type": "group",
-      "presentation": { "position": { "x": -3.4, "y": 0.65, "z": 0.8 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "size": 0.38 },
+      "presentation": { "position": { "x": -3.4, "y": 2.25, "z": 0.8 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "size": 0.38, "childSize": 0.26 },
       "camera": {
-        "position": { "x": -3.1, "y": 0.9, "z": 5.8 },
-        "focus": { "x": 0, "y": -0.8, "z": 0 },
+        "position": { "x": -3.1, "y": 2.6, "z": 3.8 },
+        "focus": { "x": 1, "y": 1.5, "z": 0 },
+        "idlePan": { "axis": "x", "amplitude": 0.4, "period": 14 },
         "transition": { "duration": 2.8, "easing": "easeInOut" }
       },
       "children": [
@@ -102,7 +111,7 @@
           "id": "lap-data",
           "label": "Lap Data",
           "type": "action",
-          "presentation": { "position": { "x": -2.2, "y": 0.2, "z": 0.8 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "size": 0.38 },
+          "presentation": { "position": { "x": 1.2, "y": 2.2, "z": 0.8 }, "rotation": { "x": 0, "y": -50, "z": 0 } },
           "target": "telemetry/laps",
           "description": "Review recent lap time analytics."
         },
@@ -110,7 +119,7 @@
           "id": "diagnostics",
           "label": "Diagnostics",
           "type": "action",
-          "presentation": { "position": { "x": -2.2, "y": -0.35, "z": 0.8 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "size": 0.38 },
+          "presentation": { "position": { "x": 1.2, "y": 1.75, "z": 0.8 }, "rotation": { "x": 0, "y": -50, "z": 0 } },
           "target": "telemetry/diagnostics",
           "description": "Inspect live simulator operational health."
         },
@@ -118,23 +127,10 @@
           "id": "back",
           "label": "Back",
           "type": "back",
-          "presentation": { "position": { "x": -2.2, "y": -0.9, "z": 0.8 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "size": 0.34 },
+          "presentation": { "position": { "x": 1.2, "y": 1.25, "z": 0.8 }, "rotation": { "x": 0, "y": -50, "z": 0 } },
           "isBackOption": true
         }
       ]
-    },
-    {
-      "id": "launch",
-      "label": "Launch Simulation",
-      "type": "action",
-      "presentation": { "position": { "x": -3.4, "y": 0.1, "z": 0.8 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "size": 0.38 },
-      "camera": {
-        "position": { "x": 0.4, "y": 3.2, "z": 7.2 },
-        "focus": { "x": 0, "y": -0.8, "z": 0 },
-        "transition": { "duration": 3.2, "easing": "easeInOut" }
-      },
-      "target": "launch/sim",
-      "description": "Start the immersive simulator session."
     }
   ]
 }

@@ -15,12 +15,20 @@ function setStatus(message) {
 async function bootstrap() {
   const config = await loadMenuConfig();
   const state = createMenuState(config);
-  const sceneController = initScene(document.querySelector('#scene-root'), state, config.cameraMotion);
+  const sceneController = initScene(
+    document.querySelector('#scene-root'),
+    state,
+    config.cameraSettings,
+    config.menuSettings,
+  );
   const cameraViewHistory = [];
 
   const moveToNodeView = (node) => {
     if (node?.camera) {
-      sceneController.moveCamera(node.camera, node.camera.transition);
+      sceneController.moveCamera({
+        ...node.camera,
+        idlePan: node.camera.idlePan ?? config.cameraSettings.idlePan,
+      }, node.camera.transition);
     }
   };
 

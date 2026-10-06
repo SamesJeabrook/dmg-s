@@ -4,6 +4,8 @@
 
 The configuration is a static tree rooted at one menu object. Root and child menu objects keep the existing `id`, `label`, and `children` hierarchy. Child nodes also retain `type` and existing action/back metadata.
 
+The root `menuSettings.position` is an XYZ translation applied to the whole menu group. Each node's `presentation.position` remains local to that translated group.
+
 ### MenuNode
 
 | Field | Type | Required | Validation / meaning |
@@ -25,6 +27,7 @@ The configuration is a static tree rooted at one menu object. Root and child men
 | `position` | `{x, y, z}` finite numbers | No | World-space location of the label relative to the scene. |
 | `rotation` | `{x, y, z}` finite numbers | No | Fixed Euler rotation in degrees; defaults to `{x: 0, y: 0, z: 0}` and does not billboard toward the camera. |
 | `size` | positive number | No | World-space visual scale; values must be greater than zero. |
+| `childSize` | positive number | No | Default size for the current menu group's child options; a child's own `presentation.size` overrides it. |
 
 Position, rotation, and size are independent of camera coordinates. A missing presentation field uses menu defaults so every existing node can still render.
 
@@ -34,6 +37,7 @@ Position, rotation, and size are independent of camera coordinates. A missing pr
 |-------|------|--------------------------------|---------------------|
 | `position` | `{x, y, z}` finite numbers | Yes | Destination camera location in scene/world coordinates. |
 | `focus` | `{x, y, z}` finite numbers | Yes | Point the camera faces after and during movement. |
+| `idlePan` | IdlePan | No | Per-view pan override; omitted values inherit the currently configured pan. |
 | `transition` | CameraTransition | No | Motion behavior; omitted values use the default transition. |
 
 ### CameraTransition
@@ -87,15 +91,22 @@ Root reveal begins after configuration and scene readiness. Submenu reveal begin
 
 The transition can start only from an Enter selection. While it is active, Enter, Delete, and Backspace inputs are ignored; arrow-key highlighting may continue. A selection without a valid camera view does not change the current camera state. Entering a submenu snapshots the current camera viewpoint, and leaving that submenu restores the snapshot regardless of whether the user used a key or its Back option.
 
-## Camera Motion
+## Root Camera Settings
 
-The root configuration may define `cameraMotion.idlePan` to apply a gentle sinusoidal offset around the home camera position and every completed transition destination.
+The root configuration defines `cameraSettings.home` for the initial camera pose and `cameraSettings.idlePan` for gentle motion around that pose and every completed transition destination. Home focus is calculated from the model center plus the configured focus offset.
+
+| Field | Type | Default | Validation / meaning |
+|-------|------|---------|---------------------|
+| `home.position` | `{x, y, z}` finite numbers | `{x: 0, y: 1.4, z: 8}` | Initial camera position before a menu selection. |
+| `home.focusOffset` | `{x, y, z}` finite numbers | `{x: 0, y: 0, z: 0}` | Offset added to the calculated model center for the initial camera focus. |
 
 | Field | Type | Default | Validation / meaning |
 |-------|------|---------|---------------------|
 | `axis` | `x`, `y`, or `z` | `x` | Camera position axis along which the drift is applied. |
 | `amplitude` | non-negative number | `0.08` | Maximum distance in scene units from the settled viewpoint. Set to `0` to disable idle movement. |
 | `period` | positive number | `8` | Time in seconds for one complete back-and-forth cycle. |
+
+An option-level `camera.idlePan` can override any subset of `axis`, `amplitude`, and `period`. Missing values inherit the active/root settings. The active idle-pan settings are part of a saved camera viewpoint and are restored when returning to a parent menu.
 
 The cycle restarts at zero offset after each transition. Camera focus remains unchanged during the drift. Saved submenu views store the settled base viewpoint, not the current oscillation offset.
 

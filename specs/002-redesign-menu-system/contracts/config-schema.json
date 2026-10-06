@@ -10,9 +10,24 @@
       "type": "array",
       "items": { "$ref": "#/$defs/menuNode" }
     },
-    "cameraMotion": {
+    "menuSettings": {
       "type": "object",
       "properties": {
+        "position": { "$ref": "#/$defs/vector3" }
+      },
+      "additionalProperties": false
+    },
+    "cameraSettings": {
+      "type": "object",
+      "properties": {
+        "home": {
+          "type": "object",
+          "properties": {
+            "position": { "$ref": "#/$defs/vector3" },
+            "focusOffset": { "$ref": "#/$defs/vector3" }
+          },
+          "additionalProperties": false
+        },
         "idlePan": {
           "type": "object",
           "properties": {
@@ -57,7 +72,12 @@
               "$ref": "#/$defs/vector3",
               "description": "Fixed XYZ Euler rotation in degrees."
             },
-            "size": { "type": "number", "exclusiveMinimum": 0 }
+            "size": { "type": "number", "exclusiveMinimum": 0 },
+            "childSize": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Default text size for the child options displayed in this menu level; an individual child's presentation.size overrides this value."
+            }
           },
           "additionalProperties": false
         },
@@ -67,6 +87,16 @@
           "properties": {
             "position": { "$ref": "#/$defs/vector3" },
             "focus": { "$ref": "#/$defs/vector3" },
+            "idlePan": {
+              "type": "object",
+              "description": "Optional idle-pan override for this camera viewpoint; omitted fields inherit the currently configured pan.",
+              "properties": {
+                "axis": { "enum": ["x", "y", "z"] },
+                "amplitude": { "type": "number", "minimum": 0 },
+                "period": { "type": "number", "exclusiveMinimum": 0 }
+              },
+              "additionalProperties": false
+            },
             "transition": {
               "type": "object",
               "properties": {

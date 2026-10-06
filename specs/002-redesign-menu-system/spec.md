@@ -109,6 +109,9 @@ A user first sees the scene without visible menu options; the root options then 
 - **FR-014**: While a camera transition is in progress, the system MUST ignore Enter, Delete, and Backspace inputs until that transition finishes; arrow-key highlighting MAY continue to update the highlighted option.
 - **FR-015**: When the user returns from a submenu using Delete, Backspace, or its selectable Back option, the system MUST restore the camera viewpoint held immediately before that submenu was entered.
 - **FR-016**: The system MUST support a subtle configurable back-and-forth camera pan while at the home viewpoint and after each camera transition settles.
+- **FR-017**: The root configuration MUST allow the home camera position and focus offset from the model center to be set independently of per-option camera destinations.
+- **FR-018**: The root configuration MUST allow the complete in-scene menu group to be translated in XYZ while preserving each option's local position.
+- **FR-019**: Each menu option with a camera destination MUST be able to override the idle-pan axis, amplitude, and period; when omitted, the root idle-pan settings MUST apply.
 - **FR-009**: When a selected option has no camera destination configured, the system MUST retain the current camera viewpoint.
 - **FR-010**: The system MUST initially keep root menu options hidden and reveal them with a blur-in transition after the scene loads.
 - **FR-011**: The system MUST keep submenu options hidden until their corresponding submenu is activated, then reveal them with a blur-in transition.
@@ -120,7 +123,8 @@ A user first sees the scene without visible menu options; the root options then 
 - **Menu Option**: A selectable scene item with configurable displayed words, position, size, optional child options, and optional camera destination and transition settings.
 - **Menu Level**: A root menu or submenu whose options become available when that level is active.
 - **Camera Viewpoint**: A camera position, focus point, and transition description associated with a menu selection.
-- **Camera Motion**: A small idle pan axis, amplitude, and cycle period applied around the current settled viewpoint.
+- **Camera Motion**: A small idle pan axis, amplitude, and cycle period applied around the current settled viewpoint, with optional per-option settings.
+- **Home Camera Settings**: The root-level initial camera position and focus offset used before a menu option is selected.
 - **Reveal State**: The visibility and reveal progress of root menu options or the currently activated submenu.
 
 ## Success Criteria *(mandatory)*

@@ -1,6 +1,11 @@
 const MENU_NODE_TYPES = new Set(['group', 'action', 'back']);
 const CAMERA_EASINGS = new Set(['linear', 'easeInOut']);
 const CAMERA_AXES = new Set(['x', 'y', 'z']);
+const DEFAULT_HOME_CAMERA = {
+  position: { x: 0, y: 1.4, z: 8 },
+  focusOffset: { x: 0, y: 0, z: 0 },
+};
+const DEFAULT_MENU_POSITION = { x: 0, y: 0, z: 0 };
 const DEFAULT_IDLE_PAN = { axis: 'x', amplitude: 0.08, period: 8 };
 
 function isNonEmptyString(value) {
@@ -38,6 +43,10 @@ function normalizePresentation(presentation) {
 
   if (Number.isFinite(presentation.size) && presentation.size > 0) {
     normalized.size = presentation.size;
+  }
+
+  if (Number.isFinite(presentation.childSize) && presentation.childSize > 0) {
+    normalized.childSize = presentation.childSize;
   }
 
   return Object.keys(normalized).length ? normalized : undefined;
@@ -87,12 +96,39 @@ function normalizeCamera(camera) {
     }
   }
 
+  if (camera.idlePan !== undefined) {
+    const idlePan = camera.idlePan;
+    if (!idlePan || typeof idlePan !== 'object' || Array.isArray(idlePan)) {
+      return undefined;
+    }
+
+    normalized.idlePan = {};
+    if (idlePan.axis !== undefined && CAMERA_AXES.has(idlePan.axis)) {
+      normalized.idlePan.axis = idlePan.axis;
+    }
+    if (idlePan.amplitude !== undefined
+      && Number.isFinite(idlePan.amplitude)
+      && idlePan.amplitude >= 0) {
+      normalized.idlePan.amplitude = idlePan.amplitude;
+    }
+    if (idlePan.period !== undefined
+      && Number.isFinite(idlePan.period)
+      && idlePan.period > 0) {
+      normalized.idlePan.period = idlePan.period;
+    }
+  }
+
   return normalized;
 }
 
-function normalizeCameraMotion(cameraMotion) {
-  const idlePan = cameraMotion?.idlePan;
+function normalizeCameraSettings(cameraSettings) {
+  const home = cameraSettings?.home;
+  const idlePan = cameraSettings?.idlePan;
   return {
+    home: {
+      position: isVector3(home?.position) ? { ...home.position } : { ...DEFAULT_HOME_CAMERA.position },
+      focusOffset: isVector3(home?.focusOffset) ? { ...home.focusOffset } : { ...DEFAULT_HOME_CAMERA.focusOffset },
+    },
     idlePan: {
       axis: CAMERA_AXES.has(idlePan?.axis) ? idlePan.axis : DEFAULT_IDLE_PAN.axis,
       amplitude: Number.isFinite(idlePan?.amplitude) && idlePan.amplitude >= 0
@@ -102,6 +138,14 @@ function normalizeCameraMotion(cameraMotion) {
         ? idlePan.period
         : DEFAULT_IDLE_PAN.period,
     },
+  };
+}
+
+function normalizeMenuSettings(menuSettings) {
+  return {
+    position: isVector3(menuSettings?.position)
+      ? { ...menuSettings.position }
+      : { ...DEFAULT_MENU_POSITION },
   };
 }
 
@@ -162,6 +206,7 @@ export function normalizeMenuConfig(config) {
   }
 
   const normalized = normalizeNode(config, new Set(), true);
-  normalized.cameraMotion = normalizeCameraMotion(config.cameraMotion);
+  normalized.menuSettings = normalizeMenuSettings(config.menuSettings);
+  normalized.cameraSettings = normalizeCameraSettings(config.cameraSettings);
   return normalized;
 }

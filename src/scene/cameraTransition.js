@@ -34,7 +34,7 @@ export function createCameraTransition(
   initialFocus = { x: 0, y: 0, z: 0 },
   idlePan = {},
 ) {
-  const pan = { ...DEFAULT_IDLE_PAN, ...idlePan };
+  let pan = { ...DEFAULT_IDLE_PAN, ...idlePan };
   let focus = copyVector(initialFocus);
   let basePosition = copyVector(camera.position);
   let transition = null;
@@ -60,10 +60,12 @@ export function createCameraTransition(
     const settings = { ...DEFAULT_TRANSITION, ...transitionSettings };
     const destinationPosition = copyVector(view.position);
     const destinationFocus = copyVector(view.focus);
+    const destinationPan = { ...pan, ...view.idlePan };
 
     if (settings.duration === 0) {
       basePosition = destinationPosition;
       applyCameraPose(basePosition, destinationFocus);
+      pan = destinationPan;
       transition = null;
       idleStartedAt = nowSeconds;
       return true;
@@ -77,6 +79,7 @@ export function createCameraTransition(
       startedAt: nowSeconds,
       duration: settings.duration,
       easing: settings.easing,
+      toPan: destinationPan,
     };
 
     return true;
@@ -108,6 +111,7 @@ export function createCameraTransition(
     if (linearProgress >= 1) {
       basePosition = copyVector(transition.toPosition);
       focus = copyVector(transition.toFocus);
+      pan = transition.toPan;
       transition = null;
       idleStartedAt = nowSeconds;
       return false;
@@ -127,6 +131,7 @@ export function createCameraTransition(
       return {
         position: copyVector(transition ? camera.position : basePosition),
         focus: copyVector(focus),
+        idlePan: { ...pan },
       };
     },
   };

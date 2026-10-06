@@ -40,7 +40,7 @@ function createLabelTexture(label, isActive, isBackOption, blurred = false) {
   return texture;
 }
 
-function createLabel(item, index, selectedIndex, options, revealProgress) {
+function createLabel(item, index, selectedIndex, options, revealProgress, inheritedSize) {
   const isActive = index === selectedIndex;
   const isBackOption = item.isBackOption || item.type === 'back';
   const group = new THREE.Group();
@@ -48,6 +48,7 @@ function createLabel(item, index, selectedIndex, options, revealProgress) {
     map: createLabelTexture(item.label, isActive, isBackOption),
     transparent: true,
     depthWrite: false,
+    depthTest: false,
     side: THREE.DoubleSide,
     opacity: revealProgress,
   });
@@ -55,11 +56,14 @@ function createLabel(item, index, selectedIndex, options, revealProgress) {
     map: createLabelTexture(item.label, isActive, isBackOption, true),
     transparent: true,
     depthWrite: false,
+    depthTest: false,
     side: THREE.DoubleSide,
     opacity: 1 - revealProgress,
   });
   const sharpPlane = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), sharpMaterial);
   const blurredPlane = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), blurredMaterial);
+  sharpPlane.renderOrder = 10;
+  blurredPlane.renderOrder = 9;
   const position = item.presentation?.position ?? {
     x: options.x,
     y: options.y - index * options.verticalSpacing,
@@ -80,7 +84,7 @@ function createLabel(item, index, selectedIndex, options, revealProgress) {
 
   applyLabelTransform(sharpPlane);
   applyLabelTransform(blurredPlane);
-  const size = item.presentation?.size ?? options.size;
+  const size = item.presentation?.size ?? inheritedSize ?? options.size;
   sharpPlane.scale.set(size * widthScale, size, 1);
   blurredPlane.scale.copy(sharpPlane.scale);
   group.add(blurredPlane, sharpPlane);
@@ -89,8 +93,15 @@ function createLabel(item, index, selectedIndex, options, revealProgress) {
   if (isActive) {
     marker = new THREE.Mesh(
       new THREE.SphereGeometry(0.045, 12, 12),
-      new THREE.MeshBasicMaterial({ color: 0x53d6c6, transparent: true, opacity: revealProgress }),
+      new THREE.MeshBasicMaterial({
+        color: 0x53d6c6,
+        transparent: true,
+        depthTest: false,
+        depthWrite: false,
+        opacity: revealProgress,
+      }),
     );
+    marker.renderOrder = 11;
     marker.position.set(position.x - 0.12, position.y, position.z + 0.02);
     group.add(marker);
   }
@@ -98,9 +109,10 @@ function createLabel(item, index, selectedIndex, options, revealProgress) {
   return { group, sharpPlane, blurredPlane, marker };
 }
 
-export function createSceneMenu(parent, layout = {}) {
+export function createSceneMenu(parent, layout = {}, position = { x: 0, y: 0, z: 0 }) {
   const options = { ...DEFAULT_LAYOUT, ...layout };
   const root = new THREE.Group();
+  root.position.set(position.x, position.y, position.z);
   parent.add(root);
   let activeLabels = [];
   let activeLevelId = null;
@@ -120,8 +132,9 @@ export function createSceneMenu(parent, layout = {}) {
 
     clearLabels();
     const items = state.getVisibleItems();
+    const childSize = activeNode?.presentation?.childSize;
     activeLabels = items.map((item, index) => {
-      const label = createLabel(item, index, state.state.activeIndex, options, revealProgress);
+      const label = createLabel(item, index, state.state.activeIndex, options, revealProgress, childSize);
       label.group.visible = revealStatus !== 'hidden';
       root.add(label.group);
       return label;

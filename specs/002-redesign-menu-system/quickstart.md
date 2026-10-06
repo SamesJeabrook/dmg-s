@@ -19,9 +19,12 @@ Open the local URL printed by Vite. The simulator model and root menu should loa
 ## Validate Menu Configuration
 
 1. Edit an option in `src/config/config.json`.
-2. Change its `label`, `presentation.position` (`x`, `y`, `z`), `presentation.rotation` (`x`, `y`, `z` in degrees), and `presentation.size`.
-3. Reload the page and verify the fixed-orientation text, world position, angle, and scale change while it remains attached to the scene/model group.
-4. Confirm the config conforms to [contracts/config-schema.json](contracts/config-schema.json).
+2. Change root `menuSettings.position` (`x`, `y`, `z`) to move the complete menu; option `presentation.position` values remain local placements within it.
+3. Change an option's `label`, `presentation.position` (`x`, `y`, `z`), `presentation.rotation` (`x`, `y`, `z` in degrees), and `presentation.size`.
+4. Reload the page and verify the root offset moves all menu labels together, while per-option positions, fixed rotations, and sizes remain effective.
+5. Confirm the config conforms to [contracts/config-schema.json](contracts/config-schema.json).
+
+To set a shared text size for one submenu, set that group's `presentation.childSize`. Its children inherit the value unless a child specifies its own `presentation.size`.
 
 ## Validate Keyboard Navigation and Reveals
 
@@ -39,7 +42,7 @@ Open the local URL printed by Vite. The simulator model and root menu should loa
 4. Select an option without a `camera` object and verify the current camera view is retained.
 5. While a configured transition is in progress, press Enter, Delete, and Backspace and verify those actions are ignored until the transition completes; verify arrow keys can still change the highlight.
 
-To tune the subtle idle pan, change the root `cameraMotion.idlePan` values in `src/config/config.json`. `axis` selects `x`, `y`, or `z`; `amplitude` is the maximum offset in scene units (use `0` to disable it); and `period` is the number of seconds for one full back-and-forth cycle. The same pan is used at home and after each camera transition.
+To tune the initial camera view, edit the root `cameraSettings.home.position` and `cameraSettings.home.focusOffset` values in `src/config/config.json`. The focus offset is added to the calculated model center. To tune the default idle pan, edit `cameraSettings.idlePan`: `axis` selects `x`, `y`, or `z`; `amplitude` is the maximum offset in scene units (use `0` to disable it); and `period` is the number of seconds for one full back-and-forth cycle. An option may override these same three fields inside its `camera` object as `camera.idlePan`; options without an override use the root settings.
 
 ## Run Automated Checks
 
